@@ -1,6 +1,9 @@
 const express=require("express");
 const { CategoryModel } = require("../model/category");
 const CategoryRouter=express.Router();
+
+
+
 CategoryRouter.get("/",async(req,res)=>{
     try {
         let data=await CategoryModel.find();
