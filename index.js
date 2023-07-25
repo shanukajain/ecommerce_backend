@@ -8,6 +8,9 @@ const app = express();
 const cors = require("cors");
 const { ProductRouter } = require("./router/product");
 const { CategoryRouter } = require("./router/CategoryRouter");
+const { CartRoute } = require("./router/cart");
+const { authenticate } = require("./Middleware/authentication");
+
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +25,8 @@ app.use(limiter);
 app.use("/user", userrouter);
 app.use("/category",CategoryRouter);
 app.use("/product", ProductRouter);
+app.use(authenticate);
+app.use("/cart",CartRoute);
 
 
 

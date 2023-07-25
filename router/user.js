@@ -54,8 +54,9 @@ userrouter.post("/login", async (req, res) => {
           if (result) {
             let token = jwt.sign(
               { email: data.email, role: data.role },
-              "backend"
-            );
+              "backend",
+{              expiresIn:'1h'
+}            );
             console.log(token)
             res
               .status(200)

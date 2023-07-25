@@ -7,7 +7,6 @@ const authenticate=async(req,res,next)=>{
     
     if(token){
         let t=await BlockuserModel.findOne({token});
-        // let t=0;
         console.log(t,1);
         if(t){
         res.status(404).send({"msg":"login again"})
@@ -15,8 +14,6 @@ const authenticate=async(req,res,next)=>{
         var decoded= jwt.verify(token,'backend');
                        console.log(decoded);
                        if(decoded){
-                           
-                           
                                 const userID=decoded.userID;
                                 req.body.userID=userID;
                                 req.body.role=decoded.role
@@ -25,14 +22,6 @@ const authenticate=async(req,res,next)=>{
                                 res.status(404).send({"msg":"please login first........."})
                                }
                 }
-    //     var decoded = jwt.verify(token, 'backend');
-
-    //    console.log(decoded);
-    //   
-       
-    //    }else {
-    //     res.status(404).send({"msg":"please login first........."})
-    //    }
     }else {
         res.status(404).send({"msg":"please login first........."})
     }
