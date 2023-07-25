@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
+const { ProductRouter } = require("./router/product");
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +19,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use("/user", userrouter);
-
+app.use("/product", ProductRouter);
 
 
 
