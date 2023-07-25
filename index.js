@@ -10,6 +10,7 @@ const { ProductRouter } = require("./router/product");
 const { CategoryRouter } = require("./router/CategoryRouter");
 const { CartRoute } = require("./router/cart");
 const { authenticate } = require("./Middleware/authentication");
+const { OrderRouter } = require("./router/order");
 
 
 app.use(cors());
@@ -27,6 +28,7 @@ app.use("/category",CategoryRouter);
 app.use("/product", ProductRouter);
 app.use(authenticate);
 app.use("/cart",CartRoute);
+app.use("/order",OrderRouter);
 
 
 
