@@ -36,7 +36,7 @@ try {
     let payload=req.body.quantity;
     let _id=req.params._id;
     await CartModel.findByIdAndUpdate({_id},{"quantity":payload});
-    res.send(200).send("done");
+    res.status(200).send("done");
 } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' })

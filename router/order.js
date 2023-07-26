@@ -46,10 +46,13 @@ for(let i=0;i<items.length;i++){
     console.log(p,items[i])
     totalAmount+=p.price*items[i].quantity
 }
-console.log(totalAmount);
+// console.log(totalAmount);
 let body=new OrderModel({user_id,items,totalAmount});
 await body.save();
-CartModel.deleteMany({user_id});
+
+    const result=await CartModel.deleteMany({user_id});
+
+
 res.status(200).send({"msg":"order has been placed"});
 }
 catch (error) {
