@@ -1,5 +1,6 @@
 const express=require("express");
 const { CategoryModel } = require("../model/category");
+const { ProductModel } = require("../model/product");
 const CategoryRouter=express.Router();
 
 
@@ -45,9 +46,14 @@ CategoryRouter.patch("/:_id",async(req,res)=>{
 
 CategoryRouter.delete("/:_id",async(req,res)=>{
     try {
-        let _id=re.params._id;
-        CategoryModel.findByIdAndDelete({_id});
+        let _id=req.params._id;
+        let data= await ProductModel.findOne({"category_id":_id});
+        if(data){
+       await CategoryModel.findByIdAndDelete({_id});
         res.status(200).send("done");
+        }else {
+            res.status(404).send({"msg":"first delete all category product"})
+        }
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: 'Internal Server Error' })
