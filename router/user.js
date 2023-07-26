@@ -7,20 +7,24 @@ const BlockuserModel = require("../model/blockuser");
 const { authenticate } = require("../Middleware/authentication");
 const userrouter = express.Router();
 
+
 userrouter.get("/", (req, res) => {
-  res.send("user Router");
+  res.status(200).send("user Router");
 });
+
+
 
 userrouter.post("/register", async (req, res) => {
   let { name, email, password, gender } = req.body;
   let data = await UserModel.findOne({ email: email });
+  console.log(name,email,password,gender);
   if (data) {
     res
       .status(409)
       .send({ msg: "User with same email address already exits." });
   } else {
     try {
-      bcrypt.hash(password, 5, async function (err, hash) {
+      bcrypt.hash(password,5, async function (err, hash) {
         if (err) {
           console.log(err);
         } else {
@@ -39,6 +43,8 @@ userrouter.post("/register", async (req, res) => {
   }
 });
 
+
+
 userrouter.post("/login", async (req, res) => {
   let { email, password } = req.body;
   try {
@@ -52,32 +58,41 @@ userrouter.post("/login", async (req, res) => {
       } else {
         bcrypt.compare(password, data.password, function (err, result) {
           if (result) {
-            let token = jwt.sign(
-              { user_id: data._id },
-              "backend",
-{              expiresIn:'1h'
-}            );
-            console.log(token)
+            let token = jwt.sign({ user_id: data._id }, "backend", {
+              expiresIn: "1h",
+            });
+            console.log(token);
             res
               .status(200)
               .send({ msg: "Login successfull", token: token, user: data });
           } else {
-            res.status(404).send({ msg: "Incorrect Password" });
+            res.status(401).send({ msg: "Unauthorized, invalid credentials" });
           }
         });
       }
     }
   } catch (error) {
     console.log(error);
-    res.status(404).send({ msg: "Something went wrong!", err: error.message });
+    res.status(500).send({ msg: "Something went wrong!", err: error.message });
   }
 });
 userrouter.use(authenticate);
+
+/**
+ * @swagger
+ * /user/logout:
+ *  get:
+ *     summary: logout user!
+ *     tags: [user]
+ *     responses:
+ *       200:
+ *         description: logout successfull.
+ */
 userrouter.get("/logout", async (req, res) => {
   let token = req.headers.authorization;
-  let user_id=req.body.user_id;
-    let body=new BlockuserModel({user_id,token});
-    await body.save();
+  let user_id = req.body.user_id;
+  let body = new BlockuserModel({ user_id, token });
+  await body.save();
   res.status(200).send({ msg: "logout successfull" });
 });
 

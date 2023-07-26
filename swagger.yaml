@@ -1,0 +1,128 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Ecommerce
+  description: API for ecommerce 
+
+paths:
+  /user/login:
+    post:
+      summary: User login
+      description: Endpoint for user login.
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: User login credentials
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: User logged in successfully
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+        401:
+          description: Unauthorized, invalid credentials
+        500:
+          description: Internal server error
+          
+  /user/register:
+    post:
+      summary: Register a new user
+      description: Endpoint to register a new user with the system.
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: User registration information
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              gender:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: User registered successfully
+        400:
+          description: Bad request, invalid user data
+        500:
+          description: Internal server error
+  /user/logout:
+    get:
+      summary: logout user
+      description: logout the user.
+      produces:
+        - application/json
+      security:
+        token:
+         type: string
+      responses:
+        200:
+          description: User logout successfully
+        500:
+          description: Internal server error
+
+  /category/:
+    get:
+      summary: give all the category of the products
+      description: give all the category of the products.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: User logout successfully
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              discrption:
+                type: string
+              createdAt:
+                type: string
+        500:
+          description: Internal server error
+  /category/create:
+    post:
+      summary: create category
+      description: category new category.
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: category information
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              discrption:
+                type: string
+      responses:
+        200:
+          description: category created
+        422:
+          description: enter all details
+        500:
+          description: Internal server error  
+  
