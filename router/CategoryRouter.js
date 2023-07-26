@@ -48,7 +48,7 @@ CategoryRouter.delete("/:_id",async(req,res)=>{
     try {
         let _id=req.params._id;
         let data= await ProductModel.findOne({"category_id":_id});
-        if(data){
+        if(!data){
        await CategoryModel.findByIdAndDelete({_id});
         res.status(200).send("done");
         }else {
