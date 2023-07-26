@@ -53,7 +53,7 @@ userrouter.post("/login", async (req, res) => {
         bcrypt.compare(password, data.password, function (err, result) {
           if (result) {
             let token = jwt.sign(
-              { email: data.email, role: data.role },
+              { user_id: data._id },
               "backend",
 {              expiresIn:'1h'
 }            );

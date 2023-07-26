@@ -8,7 +8,7 @@ ProductRouter.get("/",async(req,res)=>{
         let category_id=req.query.category_id||null;
         let product_id=req.query.product_id||null;
         if(category_id){
-            if(category_id.length==12){
+            if(category_id.length>=12){
             let data=await ProductModel.find({category_id});
             
             if(data.length!=0){
@@ -22,8 +22,8 @@ ProductRouter.get("/",async(req,res)=>{
         }
 
         }else if(product_id){
-            if(product_id.length==12){
-            let data=await ProductModel.find({"_id":product_id});
+            if(product_id.length>=12){
+            let data=await ProductModel.findOne({"_id":product_id});
             if(data.length!=0){
                 res.status(200).send(data);
             }else{
@@ -50,8 +50,9 @@ ProductRouter.post("/create",async(req,res)=>{
     try {
         let body=req.body
         if(body.title && body.price && body.category_id){
-            let body=new ProductModel(body);
-            await body.save();
+            let payload=new ProductModel(body);
+            await payload.save();
+            res.status(200).send("done");
         }else {
             res.status(422).send({"msg":"enter all details"})
         }

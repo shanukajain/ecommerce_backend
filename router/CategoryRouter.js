@@ -19,6 +19,7 @@ CategoryRouter.post("/create",async(req,res)=>{
         if(name){
             let body=new CategoryModel({name,discrption});
             await body.save();
+            res.status(200).send({"msg":"category created"})
         }else {
             res.status(422).send({"msg":"enter all details"})
         }
