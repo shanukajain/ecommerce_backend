@@ -16,7 +16,7 @@ const options = {
     },
     servers:[
       {
-        url:"https://ecommerce-a9g9.onrender.com        "
+        url:"https://ecommerce-a9g9.onrender.com"
       }
     ]
   },

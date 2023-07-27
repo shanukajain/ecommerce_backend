@@ -216,3 +216,14 @@ https://ecommerce-a9g9.onrender.com
 | :-------- | :------- | :------------------------- |
 | `token` | `Json` | order has been placed|
 
+
+```http
+  get /docs/
+```
+
+Swagger docs
+
+
+## video demonstration link
+
+https://vimeo.com/848697177/d911c348e0
