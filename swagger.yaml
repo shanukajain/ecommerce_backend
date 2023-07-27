@@ -3,10 +3,11 @@ info:
   version: 1.0.0
   title: Ecommerce
   description: API for ecommerce 
-
+tags: User,category,product,cart,order
 paths:
   /user/login:
     post:
+      tags: [User]
       summary: User login
       description: Endpoint for user login.
       produces:
@@ -39,6 +40,7 @@ paths:
   /user/register:
     post:
       summary: Register a new user
+      tags: [User]
       description: Endpoint to register a new user with the system.
       produces:
         - application/json
@@ -68,6 +70,7 @@ paths:
   /user/logout:
     get:
       summary: logout user
+      tags: [User]
       description: logout the user.
       produces:
         - application/json
@@ -83,12 +86,13 @@ paths:
   /category/:
     get:
       summary: give all the category of the products
+      tags: [category]
       description: give all the category of the products.
       produces:
         - application/json
       responses:
         200:
-          description: User logout successfully
+          description: list of category
           schema:
             type: object
             properties:
@@ -103,7 +107,8 @@ paths:
   /category/create:
     post:
       summary: create category
-      description: category new category.
+      tags: [category]
+      description: create new category.
       produces:
         - application/json
       parameters:
@@ -124,5 +129,331 @@ paths:
         422:
           description: enter all details
         500:
+          description: Internal server error 
+  /category/:_id:
+    patch:
+      summary: update category
+      tags: [category]
+      description: update category.
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: category updated information
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              discrption:
+                type: string
+      responses:
+        200:
+          description: category updated
+        500:
           description: Internal server error  
-  
+    delete:
+      summary: delete category
+      tags: [category]
+      description: delete category.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: category delete if there is not product in that category
+        404:
+          description: first delete all category product
+        500:
+          description: Internal server error
+  /product/:
+    get:
+      summary: give all the products
+      tags: [product]
+      description: give all the products.
+      produces:
+        - application/json
+      parameters:
+        - name: product_id
+          in: query
+          description: search product by id
+          required: false
+          schema:
+            type: string
+        - name: category_id
+          in: query
+          description: search product by category
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: list of product
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              price:
+                type: Number
+              discreption:
+                type: string
+              Image:
+                type: string
+              availability:
+                type: boolean
+              category_id:
+                type: string
+        500:
+          description: Internal server error
+  /product/create:
+    post:
+      summary: create product
+      tags: [product]
+      description: create new product.
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: product information
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              price:
+                type: Number      
+              discreption:
+                type: string
+              Image:
+                type: string
+              availability:
+                type: boolean
+              category_id:
+                type: string
+      responses:
+        200:
+          description: product created
+        422:
+          description: enter all details
+        500:
+          description: Internal server error 
+  /product/:_id:
+    patch:
+      summary: update product
+      tags: [product]
+      description: update product
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: product updated information
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              price:
+                type: Number
+              discreption:
+                type: string
+              Image:
+                type: string
+              availability:
+                type: boolean
+              category_id:
+                type: string
+      responses:
+        200:
+          description: product updated
+        500:
+          description: Internal server error  
+    delete:
+      summary: delete product
+      tags: [product]
+      description: delete product.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: product delete if there is not product in that category
+        500:
+          description: Internal server error
+  /cart/:
+    get:
+      summary: give cart products
+      tags: [cart]
+      description: give cart products.
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: list of cart product
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string
+              product_id:
+                type: string
+              quantity:
+                type: Number
+        500:
+          description: Internal server error
+  /cart/:_id:
+    post:
+      summary: create cart
+      tags: [cart]
+      description: new product add to cart.
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: that particular product add to cart
+        422:
+          description: product is already there
+        500:
+          description: Internal server error 
+    patch:
+      summary: update cart
+      tags: [cart]
+      description: update cart.
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+        - name: body
+          in: body
+          description: cart updated information
+          required: true
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: Number
+              
+      responses:
+        200:
+          description: cart updated
+        500:
+          description: Internal server error  
+    delete:
+      summary: delete cart
+      tags: [cart]
+      description: delete cart.
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: cart deleted
+        500:
+          description: Internal server error
+  /order/:
+    post:
+      summary:  order has been placed
+      tags: [order]
+      description: order has been placed and empty the cart
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: order hass been placed
+        500:
+          description: Internal server error 
+    get:
+      summary: show all order 
+      tags: [order]
+      description: show all order.
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: list of orders placed by user
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string
+              items:
+                type: array
+              totalAmount:
+                type: Number
+              createdAt:
+                type: Number
+        500:
+          description: Internal server error
+  /order/:_id:
+    get:
+      summary: show order by id 
+      tags: [order]
+      description:  show order by id .
+      produces:
+        - application/json
+      parameters:
+        - name: authorization
+          in: header
+          description: to check user login or not
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: show the details of particular order
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string
+              items:
+                type: array
+              totalAmount:
+                type: Number
+              createdAt:
+                type: Number
+        500:
+          description: Internal server error

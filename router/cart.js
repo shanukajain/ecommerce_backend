@@ -22,7 +22,7 @@ CartRoute.post("/:_id",async(req,res)=>{
         await body.save();
         res.status(200).send({"msg":"product added to the cart"});
         }else {
-            res.status(200).send({"msg":"product already there"})
+            res.status(422).send({"msg":"product already there"})
         }
     } catch (error) {
         console.log(error);

@@ -17,6 +17,7 @@ CategoryRouter.get("/",async(req,res)=>{
 CategoryRouter.post("/create",async(req,res)=>{
     try {
         let {name,discrption}=req.body
+        console.log(name)
         if(name){
             let body=new CategoryModel({name,discrption});
             await body.save();
