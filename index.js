@@ -3,6 +3,8 @@ const rateLimit = require("express-rate-limit");
 const connection = require("./config/db");
 const userrouter = require("./router/user");
 const swaggerJsdoc = require('swagger-jsdoc');
+const cron = require('node-cron');
+const redis_port=3001;
 const app = express();
 const cors = require("cors");
 app.use(cors());
@@ -20,20 +22,21 @@ const options = {
       }
     ]
   },
-  apis: ['./swagger.yaml'], // files containing annotations as above
+  apis: ['./swagger.yaml'], 
 };
 
 const openapiSpecification = swaggerJsdoc(options);
 
 require("dotenv").config();
 
-
 const { ProductRouter } = require("./router/product");
 const { CategoryRouter } = require("./router/CategoryRouter");
 const { CartRoute } = require("./router/cart");
 const { authenticate } = require("./Middleware/authentication");
 const { OrderRouter } = require("./router/order");
-const swaggerUI=require("swagger-ui-express")
+const swaggerUI=require("swagger-ui-express");
+const { ProductModel } = require("./model/product");
+const client = require("./config/redis");
 
 
 
@@ -58,15 +61,25 @@ app.use("/cart",CartRoute);
 app.use("/order",OrderRouter);
 
 
+const cronJob = cron.schedule('* 16 2 * * ', async() => {
+  console.log('Cron job running...');
+ let data=await ProductModel.findOneAndUpdate({"approved":false},{"approved":true});
+ if(data){
+  console.log("One product product approved",data);
+ }else {
+  console.log("all products are approved")
+ }
+});
 
-
+cronJob.start();
 
 
 
 
 app.listen(process.env.PORT, async () => {
   try {
-    await connection;
+    
+     await connection;
     console.log("db connection established");
   } catch (error) {
     console.log(error.message, "not connected");
