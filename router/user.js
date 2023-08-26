@@ -58,7 +58,7 @@ userrouter.post("/login", async (req, res) => {
       } else {
         bcrypt.compare(password, data.password, function (err, result) {
           if (result) {
-            let token = jwt.sign({ user_id: data._id }, "backend", {
+            let token = jwt.sign({ user_id: data._id,name:data.name }, "backend", {
               expiresIn: "1h",
             });
             console.log(token);

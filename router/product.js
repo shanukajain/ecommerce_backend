@@ -11,18 +11,15 @@ const redisHost = 'localhost'; // Replace with your Redis server host
 const redisPort = 6379;        // Replace with your Redis server port
 
 // Create a Redis client instance
-const client = redis.createClient({
-    host: redisHost,
-    port: redisPort
-});
+// const client = redis.createClient(redisPort);
 
-// Event listeners for client connection events
-client.connect();
+// // Event listeners for client connection events
+// client.connect();
 
-
-client.on('error', (error) => {
-    console.error('Error:', error);
-});
+// take the order, shipping parnter
+// client.on('error', (error) => {
+//     console.error('Error:', error);
+// });
 
 
 
