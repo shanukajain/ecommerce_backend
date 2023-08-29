@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema({
   status:{type:String,default:"Picking Inventory"},
   totalAmount: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
+  tracking_num:{type:String}
 });
 
 const OrderModel = mongoose.model('Order', orderSchema);

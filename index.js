@@ -37,6 +37,7 @@ const { OrderRouter } = require("./router/order");
 const swaggerUI=require("swagger-ui-express");
 const { ProductModel } = require("./model/product");
 const client = require("./config/redis");
+const { ShippmentRouter } = require("./router/shippment");
 
 
 
@@ -59,7 +60,7 @@ app.use("/product", ProductRouter);
 app.use(authenticate);
 app.use("/cart",CartRoute);
 app.use("/order",OrderRouter);
-
+app.use("/shippment",ShippmentRouter);
 
 const cronJob = cron.schedule('* 16 2 * * ', async() => {
   console.log('Cron job running...');

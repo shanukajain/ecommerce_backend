@@ -18,7 +18,6 @@ OrderRouter.get("/:_id",async(req,res)=>{
         let user_id=req.body.user_id;
         let data=await OrderModel.findOne({_id,user_id});
         let all_products=[];
-        // console.log(data);
         for(let i=0;i<data.items.length;i++){
             let item=await ProductModel.findOne({_id:data.items[i].product_id})
             all_products.push({item,"quantity":data.items[i].quantity})
@@ -29,11 +28,7 @@ OrderRouter.get("/:_id",async(req,res)=>{
         res.status(500).send({ message: 'Internal Server Error' })
     }
 })
-// order fullfillment 
-// shipping label
-// amount total
-// tracking no.(awb)
-// 
+
 
 
 OrderRouter.post("/",async(req,res)=>{
@@ -60,17 +55,16 @@ await body.save();
     const result=await CartModel.deleteMany({user_id});
 
 
-res.status(200).send({"msg":"order has been placed"});
+res.status(200).send({message:"order has been placed"});
 }
 catch (error) {
-        console.log(error);
         res.status(500).send({ message: 'Internal Server Error' })
     }
 })
 
 OrderRouter.patch("/:_id",async(req,res)=>{
 try {
-        
+    let _id=req.params._id;
     await ProductModel.findByIdAndUpdate({ _id }, body);
 } catch (error) {
     res.status(500).send({ message: 'Internal Server Error' })
@@ -79,12 +73,16 @@ try {
 OrderRouter.get("/shippment_lable/:id",async(req,res)=>{
     try {
         let _id=req.params.id;
-        let name=req.body.name
-        let payload={"status":"In Shippment"}
+        let name=req.body.name;
+        let payload={"status":"In Shippment"};
         await OrderModel.findByIdAndUpdate({ _id }, payload);
-        let body=await OrderModel.findOne({_id})
+        let body=await OrderModel.findOne({_id});
+        if(body.tracking_num){
         let data=await genratepdf({name,address:body["address"],id:_id,totalamount:body["totalAmount"]});
         res.status(200).send(data);
+        }else {
+            res.status(200).send({message:"tracking number not genreted yet"});
+        }
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: 'Internal Server Error' })
@@ -103,6 +101,17 @@ OrderRouter.get('/download-label/:id', async (req, res) => {
       res.status(404).send('Shipping label not found.');
     }
   });
+
+  OrderRouter.get("/status/:id",async(req,res)=>{
+    try {
+        let id=req.params.id;
+        let status=await OrderModel.findOne({_id:id});
+         res.status(200).send({status:status.status});   
+    } catch (error) {
+        
+    }
+  })
+
 
 module.exports={
     OrderRouter
