@@ -74,11 +74,11 @@ OrderRouter.get("/shippment_lable/:id",async(req,res)=>{
     try {
         let _id=req.params.id;
         let name=req.body.name;
-        let payload={"status":"In Shippment"};
+        let payload={"status":"In Shippment"}
         await OrderModel.findByIdAndUpdate({ _id }, payload);
         let body=await OrderModel.findOne({_id});
         if(body.tracking_num){
-        let data=await genratepdf({name,address:body["address"],id:_id,totalamount:body["totalAmount"]});
+        let data=await genratepdf({name,address:body["address"],id:_id,totalamount:body["totalAmount"],trackingNumber:body.tracking_num});
         res.status(200).send(data);
         }else {
             res.status(200).send({message:"tracking number not genreted yet"});
@@ -92,7 +92,6 @@ OrderRouter.get('/download-label/:id', async (req, res) => {
     let id=req.params.id;
     const pdfPath = path.join(__dirname, '..','shippmentlablepdf', `${id}.pdf`);
     try {
-        console.log(pdfPath);
       const pdfBytes = await fs.readFile(pdfPath);
       res.setHeader('Content-Disposition', 'attachment; filename="shipping_label.pdf"');
       res.setHeader('Content-Type', 'application/pdf');

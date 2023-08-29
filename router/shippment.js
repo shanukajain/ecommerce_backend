@@ -7,7 +7,7 @@ ShippmentRouter.post("/:id",async(req,res)=>{
 try {
     let order_id=req.params.id;
     let body= new shippmentModel({order_id});
-    await OrderModel.findByIdAndUpdate({_id:order_id},{status:"in shippment"});
+    await OrderModel.findByIdAndUpdate({_id:order_id},{status:"in shippment",tracking_num:body._id});
     await body.save();
     res.status(200).send({message:"shippment start", tracking_num:body._id});
 } catch (error) {
@@ -19,8 +19,8 @@ ShippmentRouter.patch("/:id",async(req,res)=>{
     try {
         let body=req.body;
         let id=req.params.id;
-        await shippmentModel.findByIdAndUpdate({_id:id},body);
-        let data=await shippmentModel.find({_id:id});
+       
+      let data=  await shippmentModel.findByIdAndUpdate({_id:id},body);
         await OrderModel.findByIdAndUpdate({_id:data.order_id},body);
         res.status(200).send({message:"shippment update"});
     } catch (error) {

@@ -3,12 +3,12 @@ const { PDFDocument, rgb } = require('pdf-lib');
 
 
 
-async function genratepdf({name,address,id,totalamount}) {
+async function genratepdf({name,address,id,totalamount,trackingNumber}) {
     const shippingInfo = {
         recipientName: name,
         address,
         shippingcompany:"XYZ",
-        trackingNumber: 'ABC123456789',
+        trackingNumber: trackingNumber,
         totalamount
       };
       console.log(shippingInfo)
